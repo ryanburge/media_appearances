@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ryan Burge — Media Appearances</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1410;
+    --paper: #f5f0e8;
+    --accent: #c0392b;
+    --rule: #d4c9b5;
+    --muted: #7a6e60;
+    --tag-bg: #e8e0d0;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', sans-serif;
+    min-height: 100vh;
+  }
+
+  header {
+    border-bottom: 3px solid var(--ink);
+    padding: 2rem 3rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    background: var(--paper);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .masthead h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.4rem;
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .masthead .byline {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 0.3rem;
+  }
+
+  .stats {
+    text-align: right;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  .stats .count {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent);
+    display: block;
+    line-height: 1;
+  }
+
+  .controls {
+    padding: 1rem 3rem;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+    background: var(--paper);
+    position: sticky;
+    top: 108px;
+    z-index: 99;
+  }
+
+  .search-wrap {
+    position: relative;
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .search-wrap input {
+    width: 100%;
+    border: 1.5px solid var(--ink);
+    background: white;
+    padding: 0.5rem 0.75rem 0.5rem 2rem;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.85rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .search-wrap input:focus { border-color: var(--accent); }
+
+  .search-wrap::before {
+    content: "⌕";
+    position: absolute;
+    left: 0.6rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    font-size: 1rem;
+  }
+
+  .filter-group {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 0.35rem 0.7rem;
+    border: 1.5px solid var(--ink);
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: var(--ink);
+  }
+
+  .filter-btn:hover, .filter-btn.active {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .filter-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
+
+  .sort-select {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    padding: 0.4rem 0.6rem;
+    border: 1.5px solid var(--rule);
+    background: white;
+    color: var(--muted);
+    cursor: pointer;
+    outline: none;
+  }
+
+  main {
+    padding: 1.5rem 3rem 4rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 0;
+    border-top: 1px solid var(--rule);
+    border-left: 1px solid var(--rule);
+  }
+
+  .card {
+    border-right: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    padding: 1.25rem 1.5rem;
+    transition: background 0.15s;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card:hover { background: white; }
+
+  .card-outlet {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .outlet-favicon {
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+    border-radius: 2px;
+    flex-shrink: 0;
+    opacity: 0.85;
+  }
+
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.35;
+    color: var(--ink);
+  }
+
+  .card-title a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .card-title a:hover { text-decoration: underline; text-decoration-color: var(--accent); }
+
+  .card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding-top: 0.5rem;
+  }
+
+  .card-date {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+  }
+
+  .card-type {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.6rem;
+    padding: 0.2rem 0.5rem;
+    background: var(--tag-bg);
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .no-results {
+    grid-column: 1/-1;
+    text-align: center;
+    padding: 4rem;
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--muted);
+    font-size: 0.8rem;
+  }
+
+  .result-info {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    padding: 0.5rem 0 1rem;
+  }
+
+  @media (max-width: 700px) {
+    header, .controls, main { padding-left: 1.2rem; padding-right: 1.2rem; }
+    .masthead h1 { font-size: 1.6rem; }
+    .controls { top: 88px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="masthead">
+    <h1>Ryan Burge — Media</h1>
+    <div class="byline">Press · Interviews · Commentary · Appearances</div>
+  </div>
+  <div class="stats">
+    <span class="count" id="total-count">0</span>
+    total appearances
+  </div>
+</header>
+
+<div class="controls">
+  <div class="search-wrap">
+    <input type="text" id="search" placeholder="Search by title, outlet, topic…" oninput="render()">
+  </div>
+  <div class="filter-group" id="type-filters"></div>
+  <select class="sort-select" id="sort" onchange="render()">
+    <option value="date-desc">Newest first</option>
+    <option value="date-asc">Oldest first</option>
+    <option value="outlet">By outlet</option>
+  </select>
+</div>
+
+<main>
+  <div class="result-info" id="result-info"></div>
+  <div class="grid" id="grid"></div>
+</main>
+
+<script>
+const appearances = [
+  { outlet: "ProPublica", title: "The IRS Says Churches Can Now Endorse Candidates. That Could Give Texas Pastors More Power Than Ever.", url: "https://propublica.org/article/irs-churches-endorse-candidates-texas", date: "", type: "Print/Web" },
+  { outlet: "Deseret News", title: "Politics, the third wheel in modern romance", url: "https://www.deseret.com/politics/2025/10/18/men-women-political-divide-manifests-in-dating/", date: "2025-10-18", type: "Print/Web" },
+  { outlet: "Religion News Service", title: "Ryan Burge joins the Danforth Center at Washington University.", url: "https://religionnews.com/2025/08/05/ryan-burge-joins-the-danforth-center-at-washington-university", date: "2025-08-05", type: "Print/Web" },
+  { outlet: "The New York Times", title: "This Evangelical Pastor Wants to Replace Women's Right to Vote.", url: "https://nytimes.com/2025/08/14/opinion/douglas-wilson-evangelical-hegseth.html", date: "2025-08-14", type: "Print/Web" },
+  { outlet: "The New York Times", title: "The Psychological Value of Repentance.", url: "https://nytimes.com/2025/09/21/briefing/the-psychological-value-of-repentance.html", date: "2025-09-21", type: "Print/Web" },
+  { outlet: "The New York Times", title: "Christianity After Charlie Kirk.", url: "https://nytimes.com/2025/09/22/opinion/charlie-kirk-memorial-christianity.html", date: "2025-09-22", type: "Print/Web" },
+  { outlet: "The New York Times", title: "Why There Won't Be a Charlie Kirk of the Left.", url: "https://nytimes.com/2025/09/28/opinion/charlie-kirk-democrats-religion.html", date: "2025-09-28", type: "Print/Web" },
+  { outlet: "The New York Times", title: "Where Is God in Gaza?", url: "https://nytimes.com/2025/10/12/briefing/where-is-god-in-gaza.html", date: "2025-10-12", type: "Print/Web" },
+  { outlet: "The New York Times", title: "Something Is Stirring in Christian America, and It's Making Me Nervous.", url: "https://nytimes.com/2025/10/16/opinion/christianity-charlie-kirk-revolution-revival.html", date: "2025-10-16", type: "Print/Web" },
+  { outlet: "Axios", title: "15,000 churches could close this year amid religious shift in the US.", url: "https://axios.com/2025/10/03/us-churches-close-religious-shift-christians", date: "2025-10-03", type: "Print/Web" },
+  { outlet: "Religion News Service", title: "Nonreligious Americans might not be as spiritual as we thought.", url: "https://religionnews.com/2025/10/02/nonreligious-americans-might-not-be-as-spiritual-as-we-thought", date: "2025-10-02", type: "Print/Web" },
+  { outlet: "Fox News", title: "Young Americans Are Turning Back to God.", url: "https://foxnews.com/video/6382906209112", date: "", type: "Broadcast/Podcast" },
+  { outlet: "NPR", title: "Why Are People Leaving Religion?", url: "https://one.npr.org/?sharedMediaId=nx-s1-5575655:nx-s1-mx-5762065", date: "", type: "Broadcast/Podcast" },
+  { outlet: "The Hill", title: "Is Gen Z More Religious? It Could Be Too Early to Tell.", url: "https://thehill.com/homenews/state-watch/5527208-gen-z-religious-church-attendance", date: "", type: "Print/Web" },
+  { outlet: "Asterisk Magazine", title: "The Demons of Non-Denoms.", url: "https://asteriskmag.com/issues/11/the-demons-of-non-denoms", date: "", type: "Print/Web" },
+  { outlet: "Michael Smerconish Show (SiriusXM)", title: "Michael Smerconish Show", url: "https://link.podtrac.com/smerconishpod", date: "2025-10-10", type: "Broadcast/Podcast" },
+  { outlet: "Religion News Service", title: "Is there religious revival among Gen Z?", url: "https://religionnews.com/2025/10/21/is-there-religious-revival-among-gen-z/", date: "2025-10-21", type: "Print/Web" },
+  { outlet: "Washington Post", title: "In Kansas, a new Methodist church focuses on progressive and LGBTQ+ members.", url: "https://www.washingtonpost.com/religion/2025/11/09/methodist-church-lgbtq-kansas-city/", date: "2025-11-09", type: "Print/Web" },
+  { outlet: "Religion News Service", title: "Why Trump's immigration crackdown may make America less Christian", url: "https://religionnews.com/2025/11/18/why-trumps-immigration-crackdown-may-make-america-less-christian/", date: "2025-11-18", type: "Print/Web" },
+  { outlet: "CBS News", title: "More Americans than ever attend nondenominational churches. Experts say it's a major shift in U.S. Christianity.", url: "https://www.cbsnews.com/news/more-americans-than-ever-attend-non-denominational-churches/", date: "", type: "Broadcast/Podcast" },
+  { outlet: "Deseret News", title: "How politics and work are affecting women's religious practice.", url: "https://www.deseret.com/opinion/2025/11/17/politics-and-work-hurting-women-of-faith", date: "2025-11-17", type: "Print/Web" },
+  { outlet: "The Economist", title: "The economics of megachurches", url: "https://www.economist.com/united-states/2025/12/26/the-economics-of-megachurches", date: "2025-12-26", type: "Print/Web" },
+  { outlet: "WBUR / NPR", title: "What's lost when churches close", url: "https://www.wbur.org/onpoint/2025/12/22/whats-lost-when-churches-close", date: "2025-12-22", type: "Broadcast/Podcast" },
+  { outlet: "Deseret News", title: "What's the most Republican job in America?", url: "https://www.deseret.com/politics/2025/12/25/new-data-finds-construction-and-christian-organizations-are-the-most-republican-leaning-industries-in-america/", date: "2025-12-25", type: "Print/Web" },
+  { outlet: "American Institute for Boys and Men", title: "Are young men really returning to church? The data says not so fast.", url: "https://aibm.org/commentary/are-young-men-really-returning-to-church-the-data-says-not-so-fast/", date: "", type: "Print/Web" },
+  { outlet: "The Conversation", title: "Social scientists have long found women tend to be more religious than men – but Gen Z may show a shift.", url: "https://theconversation.com/social-scientists-have-long-found-women-tend-to-be-more-religious-than-men-but-gen-z-may-show-a-shift-263693", date: "", type: "Print/Web" },
+  { outlet: "Wall Street Journal", title: "Campus Catholicism Is Having a Moment.", url: "https://www.wsj.com/opinion/free-expression/campus-catholicism-is-having-a-moment-9dcf4e93", date: "", type: "Print/Web" },
+  { outlet: "New York Times", title: "My Long Weekend With 700 People Touched by Death.", url: "https://www.nytimes.com/2026/01/07/opinion/near-death-conference-grief-chicago.html", date: "2026-01-07", type: "Print/Web" },
+  { outlet: "Deseret News", title: "Perspective: What the data really says about religious revival and Gen Z.", url: "https://www.deseret.com/opinion/2026/01/05/religious-revival-america-church-closings-gen-z/", date: "2026-01-05", type: "Print/Web" },
+  { outlet: "Deseret News", title: "The mysterious Latter-day Saint youth vote.", url: "https://www.deseret.com/politics/2026/01/10/are-young-latter-day-saints-leaning-toward-democrats-or-republicans/", date: "2026-01-10", type: "Print/Web" },
+  { outlet: "National Catholic Register", title: "Political Extremes and the Fate of Religion: What to Do About Emptying Pews — and How to Get People to Care About Faith", url: "https://www.ncregister.com/interview/political-extremes-and-the-fate-of-religion-what-to-do-about-emptying-pews-and-how-to-get-people-to-care-about-faith", date: "", type: "Print/Web" },
+  { outlet: "The Free Press", title: "America's Vanishing Church.", url: "https://www.thefp.com/p/americas-vanishing-church", date: "", type: "Print/Web" },
+  { outlet: "Houston Chronicle", title: "A louder Christian right, but not a revival: What Trump's second term is changing in religion.", url: "https://www.houstonchronicle.com/news/houston-texas/religion/article/trump-religion-anniversary-21118960.php", date: "", type: "Print/Web" },
+  { outlet: "The Daily Yonder", title: "The Geography of Non-Denominational Christianity.", url: "https://dailyyonder.com/the-geography-of-non-denominational-christianity/2026/01/21/", date: "2026-01-21", type: "Print/Web" },
+  { outlet: "The New York Times", title: "No, Young Men Are Not Returning to Church.", url: "https://www.nytimes.com/2026/01/22/opinion/interesting-times-ryan-burge.html", date: "2026-01-22", type: "Print/Web" },
+  { outlet: "Dallas Morning News", title: "McCloskey: The Democratic Party has a God-shaped hole", url: "https://www.dallasnews.com/opinion/commentary/2026/01/22/mccloskey-the-democratic-party-has-a-god-shaped-hole/", date: "2026-01-22", type: "Print/Web" },
+  { outlet: "Catholic News Agency", title: "Fact check: Are there more Gen Z Catholics than Protestants?", url: "https://www.ewtnnews.com/world/us/fact-check-are-there-more-gen-z-catholics-than-protestants", date: "", type: "Print/Web" },
+  { outlet: "Deseret News", title: "5 thoughts from Ryan Burge's new book.", url: "https://www.deseret.com/faith/2026/01/23/ryan-burge-new-book-the-vanishing-church/", date: "2026-01-23", type: "Print/Web" },
+  { outlet: "The Trinity Forum", title: "The Vanishing Church, and Why it Matters, with Ryan Burge.", url: "https://ttf.org/events/online-conversation-with-ryan-burge/", date: "", type: "Event/Talk" },
+  { outlet: "Religion News Service", title: "Ryan Burge on 'The Vanishing Church' and how polarization is reshaping American faith.", url: "https://religionnews.com/2026/01/22/ryan-burge-on-the-vanishing-church-and-how-polarization-is-reshaping-american-faith/", date: "2026-01-22", type: "Print/Web" },
+  { outlet: "Deseret News", title: "What support for physician-assisted suicide looks like in Utah — and how that could change.", url: "https://www.deseret.com/politics/2026/01/29/physician-assisted-suicide-utah-poll-maid-canada/", date: "2026-01-29", type: "Print/Web" },
+  { outlet: "New York Times", title: "Inside One Minneapolis Church, a Different Type of Protest.", url: "https://www.nytimes.com/2026/02/03/us/westminster-presbyterian-minneapolis-ice-protest.html", date: "2026-02-03", type: "Print/Web" },
+  { outlet: "The New Republic", title: "How Polarization Tore a Hole in America's Mainline Churches.", url: "https://newrepublic.com/article/205121/american-religious-polarization-missing-middle", date: "", type: "Print/Web" },
+  { outlet: "Reuters", title: "How some Democrats are using scripture to try to reach Christian voters in US midterms.", url: "https://www.reuters.com/world/us/how-some-democrats-are-using-scripture-try-reach-christian-voters-us-midterms-2026-02-17/", date: "2026-02-17", type: "Print/Web" },
+  { outlet: "The Tennessean", title: "How more polarized church is harming, helping Protestant groups | Q&A.", url: "https://www.tennessean.com/story/news/religion/2026/02/06/ryan-burge-the-vanishing-church-book/88285020007/", date: "2026-02-06", type: "Print/Web" },
+  { outlet: "The Free Press", title: "The Popular Progressive Podcast Calling Evangelicals 'Cancer'", url: "https://www.thefp.com/p/the-popular-progressive-podcast-calling", date: "", type: "Print/Web" },
+  { outlet: "New York Times", title: "On Being Inconvenienced.", url: "https://www.nytimes.com/2026/01/25/briefing/on-being-inconvenienced.html", date: "2026-01-25", type: "Print/Web" },
+  { outlet: "Washington Post", title: "Churches have gotten less moderate. That's a problem for America.", url: "https://www.washingtonpost.com/opinions/2026/02/27/polarization-protestant-churches-republicans-democrats/", date: "2026-02-27", type: "Print/Web" },
+  { outlet: "Deseret News", title: "Was Trump's first year a success? A failure? What our new poll says", url: "https://www.deseret.com/politics/2026/02/26/trump-first-year-success-failure-poll-state-of-the-union/", date: "2026-02-26", type: "Print/Web" },
+  { outlet: "Religion News Service", title: "Gallup Poll: Fewer than half of Americans say religion is 'very important' in their lives.", url: "https://religionnews.com/2026/03/03/gallup-poll-fewer-than-half-of-americans-say-religion-is-very-important-in-their-lives/", date: "2026-03-03", type: "Print/Web" },
+];
+
+const types = [...new Set(appearances.map(a => a.type))].sort();
+let activeType = null;
+
+// Build type filter buttons
+const filterWrap = document.getElementById('type-filters');
+types.forEach(t => {
+  const btn = document.createElement('button');
+  btn.className = 'filter-btn';
+  btn.textContent = t;
+  btn.onclick = () => {
+    activeType = activeType === t ? null : t;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    if (activeType) btn.classList.add('active');
+    render();
+  };
+  filterWrap.appendChild(btn);
+});
+
+function getFavicon(url) {
+  if (!url) return null;
+  try {
+    const domain = new URL(url).hostname;
+    return `https://www.google.com/s2/favicons?domain=${domain}&sz=32`;
+  } catch { return null; }
+}
+
+function formatDate(d) {
+  if (!d) return '';
+  const [y, m, day] = d.split('-');
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return `${months[parseInt(m)-1]} ${parseInt(day)}, ${y}`;
+}
+
+function render() {
+  const query = document.getElementById('search').value.toLowerCase();
+  const sort = document.getElementById('sort').value;
+
+  let filtered = appearances.filter(a => {
+    const matchText = !query || a.title.toLowerCase().includes(query) || a.outlet.toLowerCase().includes(query);
+    const matchType = !activeType || a.type === activeType;
+    return matchText && matchType;
+  });
+
+  if (sort === 'date-desc') {
+    filtered.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  } else if (sort === 'date-asc') {
+    filtered.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+  } else if (sort === 'outlet') {
+    filtered.sort((a, b) => a.outlet.localeCompare(b.outlet));
+  }
+
+  document.getElementById('total-count').textContent = appearances.length;
+  document.getElementById('result-info').textContent = 
+    filtered.length === appearances.length 
+      ? `Showing all ${appearances.length} appearances` 
+      : `Showing ${filtered.length} of ${appearances.length} appearances`;
+
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+
+  if (filtered.length === 0) {
+    grid.innerHTML = '<div class="no-results">No appearances match your search.</div>';
+    return;
+  }
+
+  filtered.forEach((a, i) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.style.animationDelay = `${Math.min(i * 0.02, 0.3)}s`;
+    const favicon = getFavicon(a.url);
+    const faviconHtml = favicon ? `<img class="outlet-favicon" src="${favicon}" alt="" onerror="this.style.display='none'">` : '';
+    card.innerHTML = `
+      <div class="card-outlet">${faviconHtml}${a.outlet}</div>
+      <div class="card-title">${a.url ? `<a href="${a.url}" target="_blank" rel="noopener">${a.title}</a>` : a.title}</div>
+      <div class="card-meta">
+        <span class="card-date">${formatDate(a.date)}</span>
+        <span class="card-type">${a.type}</span>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+render();
+</script>
+</body>
+</html>
