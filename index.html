@@ -249,6 +249,24 @@
     font-size: 0.8rem;
   }
 
+  .year-divider {
+    grid-column: 1 / -1;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: var(--accent);
+    padding: 2rem 0.5rem 0.75rem;
+    border-bottom: 2px solid var(--ink);
+    letter-spacing: -0.02em;
+  }
+
+  .filter-sep {
+    width: 1px;
+    height: 1.5rem;
+    background: var(--rule);
+    align-self: center;
+  }
+
   .result-info {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 0.7rem;
@@ -281,6 +299,8 @@
     <input type="text" id="search" placeholder="Search by title, outlet, topic…" oninput="render()">
   </div>
   <div class="filter-group" id="type-filters"></div>
+  <div class="filter-sep"></div>
+  <div class="filter-group" id="year-filters"></div>
   <select class="sort-select" id="sort" onchange="render()">
     <option value="date-desc">Newest first</option>
     <option value="date-asc">Oldest first</option>
@@ -349,6 +369,11 @@ const appearances = [
 
 const types = [...new Set(appearances.map(a => a.type))].sort();
 let activeType = null;
+let activeYear = null;
+
+function getYear(date) {
+  return date ? date.split('-')[0] : 'Undated';
+}
 
 // Build type filter buttons
 const filterWrap = document.getElementById('type-filters');
@@ -358,11 +383,32 @@ types.forEach(t => {
   btn.textContent = t;
   btn.onclick = () => {
     activeType = activeType === t ? null : t;
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('#type-filters .filter-btn').forEach(b => b.classList.remove('active'));
     if (activeType) btn.classList.add('active');
     render();
   };
   filterWrap.appendChild(btn);
+});
+
+// Build year filter buttons
+const years = [...new Set(appearances.map(a => getYear(a.date)))]
+  .sort((a, b) => {
+    if (a === 'Undated') return 1;
+    if (b === 'Undated') return -1;
+    return b.localeCompare(a);
+  });
+const yearWrap = document.getElementById('year-filters');
+years.forEach(y => {
+  const btn = document.createElement('button');
+  btn.className = 'filter-btn';
+  btn.textContent = y;
+  btn.onclick = () => {
+    activeYear = activeYear === y ? null : y;
+    document.querySelectorAll('#year-filters .filter-btn').forEach(b => b.classList.remove('active'));
+    if (activeYear) btn.classList.add('active');
+    render();
+  };
+  yearWrap.appendChild(btn);
 });
 
 function getFavicon(url) {
@@ -387,21 +433,32 @@ function render() {
   let filtered = appearances.filter(a => {
     const matchText = !query || a.title.toLowerCase().includes(query) || a.outlet.toLowerCase().includes(query);
     const matchType = !activeType || a.type === activeType;
-    return matchText && matchType;
+    const matchYear = !activeYear || getYear(a.date) === activeYear;
+    return matchText && matchType && matchYear;
   });
 
   if (sort === 'date-desc') {
-    filtered.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+    filtered.sort((a, b) => {
+      if (!a.date && !b.date) return 0;
+      if (!a.date) return 1;
+      if (!b.date) return -1;
+      return b.date.localeCompare(a.date);
+    });
   } else if (sort === 'date-asc') {
-    filtered.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+    filtered.sort((a, b) => {
+      if (!a.date && !b.date) return 0;
+      if (!a.date) return 1;
+      if (!b.date) return -1;
+      return a.date.localeCompare(b.date);
+    });
   } else if (sort === 'outlet') {
     filtered.sort((a, b) => a.outlet.localeCompare(b.outlet));
   }
 
   document.getElementById('total-count').textContent = appearances.length;
-  document.getElementById('result-info').textContent = 
-    filtered.length === appearances.length 
-      ? `Showing all ${appearances.length} appearances` 
+  document.getElementById('result-info').textContent =
+    filtered.length === appearances.length
+      ? `Showing all ${appearances.length} appearances`
       : `Showing ${filtered.length} of ${appearances.length} appearances`;
 
   const grid = document.getElementById('grid');
@@ -412,7 +469,21 @@ function render() {
     return;
   }
 
+  const showGroups = (sort === 'date-desc' || sort === 'date-asc') && !activeYear;
+  let currentYear = null;
+
   filtered.forEach((a, i) => {
+    if (showGroups) {
+      const yearLabel = getYear(a.date);
+      if (yearLabel !== currentYear) {
+        currentYear = yearLabel;
+        const divider = document.createElement('div');
+        divider.className = 'year-divider';
+        divider.textContent = yearLabel;
+        grid.appendChild(divider);
+      }
+    }
+
     const card = document.createElement('div');
     card.className = 'card';
     card.style.animationDelay = `${Math.min(i * 0.02, 0.3)}s`;
