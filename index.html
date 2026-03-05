@@ -42,7 +42,10 @@
     font-weight: 900;
     line-height: 1;
     letter-spacing: -0.02em;
+    cursor: pointer;
+    user-select: none;
   }
+  .masthead h1:hover { opacity: 0.75; }
 
   .masthead .byline {
     font-family: 'IBM Plex Mono', monospace;
@@ -285,7 +288,7 @@
 
 <header>
   <div class="masthead">
-    <h1>Ryan Burge — Media</h1>
+    <h1 onclick="clearFilters()">Ryan Burge — Media</h1>
     <div class="byline">Press · Interviews · Commentary · Appearances</div>
   </div>
   <div class="stats">
@@ -494,6 +497,15 @@ const types = [...new Set(appearances.map(a => a.type))].sort();
 let activeType = null;
 let activeYear = null;
 let activeOutlet = null;
+
+function clearFilters() {
+  activeType = null;
+  activeYear = null;
+  activeOutlet = null;
+  document.getElementById('search').value = '';
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  render();
+}
 
 function getYear(date) {
   return date ? date.split('-')[0] : 'Undated';
