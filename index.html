@@ -277,10 +277,43 @@
     padding: 0.5rem 0 1rem;
   }
 
+  .filter-toggle { display: none; }
+  .filter-panel { display: contents; }
+
   @media (max-width: 700px) {
     header, .controls, main { padding-left: 1.2rem; padding-right: 1.2rem; }
     .masthead h1 { font-size: 1.6rem; }
-    .controls { top: 88px; }
+    .controls { top: 88px; flex-wrap: wrap; }
+
+    .filter-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.35rem 0.7rem;
+      border: 1.5px solid var(--ink);
+      background: var(--paper);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .filter-toggle.has-active {
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .filter-panel {
+      display: none;
+      flex-direction: column;
+      width: 100%;
+      gap: 0.6rem;
+      padding-top: 0.25rem;
+    }
+    .filter-panel.open { display: flex; }
+    .filter-panel .filter-sep { display: none; }
+    .filter-panel .sort-select { align-self: flex-start; }
   }
 </style>
 </head>
@@ -301,16 +334,19 @@
   <div class="search-wrap">
     <input type="text" id="search" placeholder="Search by title, outlet, topic…" oninput="render()">
   </div>
-  <div class="filter-group" id="type-filters"></div>
-  <div class="filter-sep"></div>
-  <div class="filter-group" id="year-filters"></div>
-  <div class="filter-sep"></div>
-  <div class="filter-group" id="outlet-filters"></div>
-  <select class="sort-select" id="sort" onchange="render()">
-    <option value="date-desc">Newest first</option>
-    <option value="date-asc">Oldest first</option>
-    <option value="outlet">By outlet</option>
-  </select>
+  <button class="filter-toggle" id="filter-toggle" onclick="toggleFilters()">Filters ▾</button>
+  <div class="filter-panel" id="filter-panel">
+    <div class="filter-group" id="type-filters"></div>
+    <div class="filter-sep"></div>
+    <div class="filter-group" id="year-filters"></div>
+    <div class="filter-sep"></div>
+    <div class="filter-group" id="outlet-filters"></div>
+    <select class="sort-select" id="sort" onchange="render()">
+      <option value="date-desc">Newest first</option>
+      <option value="date-asc">Oldest first</option>
+      <option value="outlet">By outlet</option>
+    </select>
+  </div>
 </div>
 
 <main>
@@ -581,7 +617,23 @@ function clearFilters() {
   activeOutlet = null;
   document.getElementById('search').value = '';
   document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  updateFilterToggle();
   render();
+}
+
+function toggleFilters() {
+  const panel = document.getElementById('filter-panel');
+  const btn = document.getElementById('filter-toggle');
+  const open = panel.classList.toggle('open');
+  btn.textContent = (open ? 'Filters ▴' : 'Filters ▾');
+  if (open && (activeType || activeYear || activeOutlet)) btn.classList.add('has-active');
+}
+
+function updateFilterToggle() {
+  const btn = document.getElementById('filter-toggle');
+  if (!btn) return;
+  const hasActive = activeType || activeYear || activeOutlet;
+  btn.classList.toggle('has-active', !!hasActive);
 }
 
 function getYear(date) {
@@ -598,6 +650,7 @@ types.forEach(t => {
     activeType = activeType === t ? null : t;
     document.querySelectorAll('#type-filters .filter-btn').forEach(b => b.classList.remove('active'));
     if (activeType) btn.classList.add('active');
+    updateFilterToggle();
     render();
   };
   filterWrap.appendChild(btn);
@@ -619,6 +672,7 @@ years.forEach(y => {
     activeYear = activeYear === y ? null : y;
     document.querySelectorAll('#year-filters .filter-btn').forEach(b => b.classList.remove('active'));
     if (activeYear) btn.classList.add('active');
+    updateFilterToggle();
     render();
   };
   yearWrap.appendChild(btn);
@@ -642,6 +696,7 @@ topOutlets.forEach(o => {
     activeOutlet = activeOutlet === o ? null : o;
     document.querySelectorAll('#outlet-filters .filter-btn').forEach(b => b.classList.remove('active'));
     if (activeOutlet) btn.classList.add('active');
+    updateFilterToggle();
     render();
   };
   outletWrap.appendChild(btn);
